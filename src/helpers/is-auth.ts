@@ -16,7 +16,6 @@ export const isAuth = (req: userId, res: res, next: next) => {
   }
   console.log(req.headers);
   if (!process.env.JWT_SECRET_KEY || !req.get("Auth")) {
-    console.log(req.get("Auth"));
     throw errorHandler("Not authorized", 401);
   }
   const token: token = req.get("Auth")?.split("  ")[1];
