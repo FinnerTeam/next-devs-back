@@ -1,0 +1,1 @@
+web: node ts-built/app.js
