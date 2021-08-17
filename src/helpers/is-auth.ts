@@ -14,7 +14,6 @@ export const isAuth = (req: userId, res: res, next: next) => {
   if (ignored_routes.includes(req.baseUrl)) {
     return next();
   }
-  console.log(req.headers);
   if (!process.env.JWT_SECRET_KEY || !req.get("Auth")) {
     throw errorHandler("Not authorized", 401);
   }
