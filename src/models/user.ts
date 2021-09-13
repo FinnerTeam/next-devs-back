@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import { IUser } from "../types/models";
 import { updateProfileBody } from "../types/express";
 import { errorHandler } from "../helpers/errorHandler";
-import { tokenGenerator } from "../helpers/tokens";
 
 const userSchema = new mongoose.Schema(
   {
@@ -36,42 +35,42 @@ userSchema.pre(
   }
 );
 
-export const login = async function (password: string, userData: any) {
-  const {
-    userName,
-    firstName,
-    lastName,
-    company,
-    city,
-    country,
-    postalCode,
-    aboutMe,
-    email,
-    _id,
-  } = userData;
-  const isPasswordValid = await bcrypt.compare(password, userData.password);
-  if (!isPasswordValid) {
-    throw errorHandler("Email or password are incorrect", 401);
-  }
-  if (process.env.JWT_SECRET_KEY) {
-    const accessToken = tokenGenerator(email, _id, "ACCESS");
-    const refreshToken = tokenGenerator(email, _id, "REFRESH");
-    return {
-      accessToken,
-      refreshToken,
-      userName,
-      firstName,
-      lastName,
-      company,
-      city,
-      country,
-      postalCode,
-      aboutMe,
-    };
-  } else {
-    throw errorHandler("An unknown error occurred", 500);
-  }
-};
+// export const login = async function (password: string, userData: any) {
+//   const {
+//     userName,
+//     firstName,
+//     lastName,
+//     company,
+//     city,
+//     country,
+//     postalCode,
+//     aboutMe,
+//     email,
+//     _id,
+//   } = userData;
+//   const isPasswordValid = await bcrypt.compare(password, userData.password);
+//   if (!isPasswordValid) {
+//     throw errorHandler("Email or password are incorrect", 401);
+//   }
+//   if (process.env.JWT_SECRET_KEY) {
+//     const accessToken = tokenGenerator(email, _id, "ACCESS");
+//     const refreshToken = tokenGenerator(email, _id, "REFRESH");
+//     return {
+//       accessToken,
+//       refreshToken,
+//       userName,
+//       firstName,
+//       lastName,
+//       company,
+//       city,
+//       country,
+//       postalCode,
+//       aboutMe,
+//     };
+//   } else {
+//     throw errorHandler("An unknown error occurred", 500);
+//   }
+// };
 
 export const updateProfile = async (
   fieldsToUpdate: updateProfileBody,

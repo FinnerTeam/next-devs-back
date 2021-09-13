@@ -33,3 +33,11 @@ export interface loginBody extends Request {
   email: string;
   password: string;
 }
+
+export interface refreshTokenBody extends Request {
+  refreshToken: string;
+}
+
+export interface tokens extends refreshTokenBody {
+  accessToken: string;
+}

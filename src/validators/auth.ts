@@ -55,3 +55,11 @@ export const loginValidator = [
   body("email", emailMsg).trim().normalizeEmail().isEmail(),
   body("password", passwordMsg).trim(),
 ];
+
+export const logOutValidator = [
+  body("accessToken", "Token is invalid").isString(),
+  body("refreshToken", "Token is invalid").isString(),
+];
+export const refreshTokenValidator = [
+  body("refreshToken", "Token is invalid").isString(),
+];

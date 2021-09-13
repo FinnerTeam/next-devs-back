@@ -1,16 +1,21 @@
 import jwt from "jsonwebtoken";
 
-type tokenType = "ACCESS" | "REFRESH";
+export const accessTokenGenerator = (email: string, userId: string) => {
+  if (process.env.JWT_SECRET_KEY) {
+    return jwt.sign({ email, userId }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1h",
+    });
+  }
+};
 
-export const tokenGenerator = (
+export const refreshTokenGenerator = (
   email: string,
   userId: string,
-  type: tokenType
+  tokenId: string
 ) => {
   if (process.env.JWT_SECRET_KEY) {
-    const time = type === "ACCESS" ? "1h" : "365d";
-    return jwt.sign({ email, userId }, process.env.JWT_SECRET_KEY, {
-      expiresIn: time,
+    return jwt.sign({ email, tokenId, userId }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "365d",
     });
   }
 };

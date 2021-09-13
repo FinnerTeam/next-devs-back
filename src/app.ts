@@ -6,6 +6,7 @@ import { isAuth } from "./helpers/is-auth";
 import morgan from "morgan";
 import fs from "fs";
 import path from "path";
+import Redis from "redis";
 
 import authRoutes from "./routes/auth";
 import userRoutes from "./routes/user";
@@ -15,6 +16,9 @@ const accessLogStream = fs.createWriteStream(
   path.join(path.resolve(), "access.log"),
   { flags: "a" }
 );
+
+//add production url
+export const redisClient = Redis.createClient();
 
 const app = express();
 
