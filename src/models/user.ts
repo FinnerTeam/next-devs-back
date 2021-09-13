@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { IUser } from "../types/models";
 import { updateProfileBody } from "../types/express";
 import { errorHandler } from "../helpers/errorHandler";
-import jwt from "jsonwebtoken";
+import { tokenGenerator } from "../helpers/tokens";
 
 const userSchema = new mongoose.Schema(
   {
@@ -36,8 +36,7 @@ userSchema.pre(
   }
 );
 
-export const login = async function (email: string, password: string) {
-  const user = await UserDB.findOne({ email });
+export const login = async function (password: string, userData: any) {
   const {
     userName,
     firstName,
@@ -47,19 +46,19 @@ export const login = async function (email: string, password: string) {
     country,
     postalCode,
     aboutMe,
-  } = user;
-  const isPasswordValid = await bcrypt.compare(password, user.password);
+    email,
+    _id,
+  } = userData;
+  const isPasswordValid = await bcrypt.compare(password, userData.password);
   if (!isPasswordValid) {
-    throw errorHandler("Wrong password!", 401);
+    throw errorHandler("Email or password are incorrect", 401);
   }
   if (process.env.JWT_SECRET_KEY) {
-    const token = jwt.sign(
-      { email: user.email, userId: user._id.toString() },
-      process.env.JWT_SECRET_KEY,
-      { expiresIn: "1h" }
-    );
+    const accessToken = tokenGenerator(email, _id, "ACCESS");
+    const refreshToken = tokenGenerator(email, _id, "REFRESH");
     return {
-      token,
+      accessToken,
+      refreshToken,
       userName,
       firstName,
       lastName,

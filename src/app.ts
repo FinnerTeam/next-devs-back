@@ -23,7 +23,7 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan("combined", { stream: accessLogStream }));
 
-app.use("*", isAuth);
+app.use(isAuth);
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 

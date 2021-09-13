@@ -51,12 +51,12 @@ export const loginController = async (req: loginBody, res: res, next: next) => {
     if (!errors.isEmpty()) {
       throw errorHandler("Validation failed", 422, errors.array());
     }
-    const isUserExists = await UserDB.exists({ email });
-    if (!isUserExists) {
-      throw errorHandler("Email user does not exist", 401);
+    const user = await UserDB.findOne({ email });
+    if (!user) {
+      throw errorHandler("Email or password are incorrect", 401);
     }
-    const user = await login(email, password);
-    res.status(200).json(user);
+    const userToken = await login(password, user);
+    res.status(200).json(userToken);
   } catch (err) {
     next(err);
   }
